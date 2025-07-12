@@ -6,7 +6,7 @@
 /*   By: aobshatk <aobshatk@42warsaw.pl>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 13:22:25 by aobshatk          #+#    #+#             */
-/*   Updated: 2025/07/12 13:47:22 by aobshatk         ###   ########.fr       */
+/*   Updated: 2025/07/12 13:50:45 by aobshatk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,16 +32,8 @@ typedef struct s_b_tree
 	struct s_b_tree	*r;
 }					b_tree;
 
-typedef struct s_list
-{
-	char val;
-	struct s_list	*next;
-
-}	t_list;
-
 void	push_tree(b_tree **tree, b_tree node);
 void	pop_tree(b_tree **tree, b_tree node);
-void	add_node(t_list **head, t_list *node);
 void parse_input(b_tree **tree, char *parse_str);
 void	parse_expr(b_tree **tree, char *str, int *i);
 void free_tree(b_tree *tree);
