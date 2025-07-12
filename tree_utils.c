@@ -6,7 +6,7 @@
 /*   By: aobshatk <aobshatk@42warsaw.pl>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 13:27:45 by aobshatk          #+#    #+#             */
-/*   Updated: 2025/07/11 13:31:50 by aobshatk         ###   ########.fr       */
+/*   Updated: 2025/07/12 13:46:28 by aobshatk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,12 @@ void	push_tree(b_tree **tree, b_tree node)
 	}
 	if (!temp->l)
 	{
-		temp->l = new_node(node);
+		(*tree)->l = new_node(node);
 		return ;
 	}
 	if (!temp->r)
 	{
-		temp->r = new_node(node);
+		(*tree)->r = new_node(node);
 		return ;
 	}
 	while (temp->l)
@@ -107,4 +107,13 @@ int	add_leaf(b_tree *branch, b_tree leaf)
 		return (1);
 	}
 	return (0);
+}
+
+void free_tree(b_tree *tree)
+{
+	if (!tree)
+		return;
+	free_tree(tree->l);
+	free_tree(tree->r);
+	free(tree);
 }

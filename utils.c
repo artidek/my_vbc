@@ -6,7 +6,7 @@
 /*   By: aobshatk <aobshatk@42warsaw.pl>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 15:08:13 by aobshatk          #+#    #+#             */
-/*   Updated: 2025/07/11 23:42:37 by aobshatk         ###   ########.fr       */
+/*   Updated: 2025/07/12 13:47:37 by aobshatk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,78 +14,79 @@
 
 int	parse_bracket(char *str, int *i)
 {
-	b_tree *tree = NULL;
-	b_tree node;
+	b_tree	*outer = NULL;
+	b_tree	*inner = NULL;
+	b_tree	node;
 
 	while (str[*i])
 	{
-		if (str[*i] == ')')
-		{
-			int val = traverse_tree(tree);
-			printf("i %d\n", val);
-			(*i)++;
-			return (val);
-		}
 		if (str[*i] == '(')
 		{
-			(*i)++;
-			node = (b_tree){.type = VAL, .val = parse_bracket(str, i), .l = NULL,
+			while (str[*i] == '(')
+				(*i)++;
+			parse_expr(&inner, str, i);
+			node = (b_tree){.type = VAL, .val = traverse_tree(inner), .l = NULL,
 				.r = NULL};
-			push_tree(&tree, node);
+			push_tree(&outer, node);
+			free_tree(inner);
+			inner = NULL;
 		}
-		else if (isdigit(str[*i]))
+		if (isdigit(str[*i]))
 		{
 			node = (b_tree){.type = VAL, .val = str[*i] - 48, .l = NULL,
 				.r = NULL};
-			push_tree(&tree, node);
+			push_tree(&outer, node);
 		}
-		else if (str[*i] == '+' && str[*i + 1])
+		else if (str[*i] == '+')
 		{
 			node = (b_tree){.type = ADD, .l = NULL, .r = NULL};
-			pop_tree(&tree, node);
+			pop_tree(&outer, node);
 		}
-		else if (str[*i] == '*' && str[*i + 1])
+		else if (str[*i] == '*')
 		{
 			node = (b_tree){.type = MULT, .l = NULL, .r = NULL};
-			push_tree(&tree, node);
+			push_tree(&outer, node);
+		}
+		if (str[*i] == ')')
+		{
+			int val = traverse_tree(outer);
+			free_tree(outer);
+			return (val);
 		}
 		if (str[*i])
 			(*i)++;
 	}
-	return (traverse_tree(tree));
+	return (0);
 }
 
-char	*build_str(char *str, int *i)
+void	parse_expr(b_tree **tree, char *str, int *i)
 {
-	int open_cnt = 0;
-	int close_cnt = 0;
-	t_list *list = NULL;
+	b_tree node;
 
 	while (str[*i])
 	{
-		if (str[*i] == '(')
-			open_cnt++;
-		if (str[*i] == ')')
-			close_cnt++;
-		add_node(&list, new_nd(str[*i]));
-		if (open_cnt == close_cnt)
+		if (isdigit(str[*i]))
+		{
+			node = (b_tree){.type = VAL, .val = str[*i] - 48, .l = NULL,
+				.r = NULL};
+			push_tree(tree, node);
+		}
+		else if (str[*i] == '+')
+		{
+			node = (b_tree){.type = ADD, .l = NULL, .r = NULL};
+			pop_tree(tree, node);
+		}
+		else if (str[*i] == '*')
+		{
+			node = (b_tree){.type = MULT, .l = NULL, .r = NULL};
+			push_tree(tree, node);
+		}
+		else if (str[*i] == ')')
 		{
 			(*i)++;
-			break ;
+			return;
 		}
-		(*i)++;
+		if (str[*i])
+			(*i)++;
 	}
-	int size = list_size(list);
-	char *res = malloc(sizeof(char) * size + 1);
-	t_list *temp = list;
-	int j = 0;
-	while (temp)
-	{
-		res[j] = temp->val;
-		j++;
-		temp = temp->next;
-	}
-	free_list(&list);
-	res[size] = 0;
-	return (res);
 }

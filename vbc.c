@@ -16,6 +16,7 @@ int	traverse_tree(b_tree *tree)
 	default:
 		break ;
 	}
+	return (tree->val);
 }
 
 void parse_input(b_tree **tree, char *parse_str)
@@ -42,13 +43,11 @@ void parse_input(b_tree **tree, char *parse_str)
 		}
 		else if (parse_str[i] == '(')
 		{
-			char *str = build_str(parse_str , &i);
-			int temp = 0;
-			node = (b_tree){.type = VAL, .val = parse_bracket(str, &temp), .l = NULL,
+			node = (b_tree){.type = VAL, .val = parse_bracket(parse_str, &i), .l = NULL,
 				.r = NULL};
 			push_tree(tree, node);
-			free(str);
 		}
+		printf("str %s\n", &parse_str[i]);
 		if (parse_str[i])
 			i++;
 	}
@@ -56,31 +55,13 @@ void parse_input(b_tree **tree, char *parse_str)
 
 int	main(int argc, char **argv)
 {
-	char	*parse_str;
 	b_tree	*tree;
-	b_tree	*temp;
 
 	if (argc < 2)
 		return (1);
-	parse_str = argv[1];
 	tree = NULL;
 	parse_input(&tree, argv[1]);
-	temp = tree;
-	// while (temp->l)
-	// {
-	// 	printf("   %p\n", temp);
-	// 	printf("left %p      ", temp->l);
-	// 	printf("right %p\n", temp->r);
-	// 	temp = temp->l;
-	// }
-	// temp = tree;
-	// while (temp->r)
-	// {
-	// 	printf("   %p\n", temp);
-	// 	printf("left %p      ", temp->l);
-	// 	printf("right %p\n", temp->r);
-	// 	temp = temp->r;
-	// }
 	printf("result: %d\n", traverse_tree(tree));
+	free_tree(tree);
 	return (0);
 }
