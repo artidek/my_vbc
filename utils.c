@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aobshatk <aobshatk@42warsaw.pl>            +#+  +:+       +#+        */
+/*   By: aobshatk <aobshatk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 15:08:13 by aobshatk          #+#    #+#             */
-/*   Updated: 2025/07/12 13:47:37 by aobshatk         ###   ########.fr       */
+/*   Updated: 2025/07/14 16:03:54 by aobshatk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,10 +82,7 @@ void	parse_expr(b_tree **tree, char *str, int *i)
 			push_tree(tree, node);
 		}
 		else if (str[*i] == ')')
-		{
-			(*i)++;
 			return;
-		}
 		if (str[*i])
 			(*i)++;
 	}

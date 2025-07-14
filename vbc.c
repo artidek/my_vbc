@@ -47,7 +47,6 @@ void parse_input(b_tree **tree, char *parse_str)
 				.r = NULL};
 			push_tree(tree, node);
 		}
-		printf("str %s\n", &parse_str[i]);
 		if (parse_str[i])
 			i++;
 	}
