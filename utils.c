@@ -6,84 +6,38 @@
 /*   By: aobshatk <aobshatk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 15:08:13 by aobshatk          #+#    #+#             */
-/*   Updated: 2025/07/14 16:03:54 by aobshatk         ###   ########.fr       */
+/*   Updated: 2025/07/31 16:17:39 by aobshatk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vbc.h"
 
-int	parse_bracket(char *str, int *i)
+b_tree	*parse_bracket(char *str, int *i, b_tree *tree)
 {
-	b_tree	*outer = NULL;
-	b_tree	*inner = NULL;
-	b_tree	node;
-
+	b_tree *temp = tree;
 	while (str[*i])
 	{
 		if (str[*i] == '(')
 		{
-			while (str[*i] == '(')
-				(*i)++;
-			parse_expr(&inner, str, i);
-			node = (b_tree){.type = VAL, .val = traverse_tree(inner), .l = NULL,
-				.r = NULL};
-			push_tree(&outer, node);
-			free_tree(inner);
-			inner = NULL;
-		}
-		if (isdigit(str[*i]))
-		{
-			node = (b_tree){.type = VAL, .val = str[*i] - 48, .l = NULL,
-				.r = NULL};
-			push_tree(&outer, node);
-		}
-		else if (str[*i] == '+')
-		{
-			node = (b_tree){.type = ADD, .l = NULL, .r = NULL};
-			pop_tree(&outer, node);
-		}
-		else if (str[*i] == '*')
-		{
-			node = (b_tree){.type = MULT, .l = NULL, .r = NULL};
-			push_tree(&outer, node);
-		}
-		if (str[*i] == ')')
-		{
-			int val = traverse_tree(outer);
-			free_tree(outer);
-			return (val);
-		}
-		if (str[*i])
 			(*i)++;
-	}
-	return (0);
-}
-
-void	parse_expr(b_tree **tree, char *str, int *i)
-{
-	b_tree node;
-
-	while (str[*i])
-	{
-		if (isdigit(str[*i]))
-		{
-			node = (b_tree){.type = VAL, .val = str[*i] - 48, .l = NULL,
-				.r = NULL};
-			push_tree(tree, node);
+			temp = parse_bracket(str, i, tree);
+			int res = traverse_tree(temp);
+			free_tree(temp);
+			push_tree(&tree, (b_tree){.type = VAL, .val = res, .l = NULL, .r = NULL});
 		}
+		if (isdigit(str[*i]))
+			push_tree(&tree, (b_tree){.type = VAL, .val = str[*i] -48, .l = NULL, .r = NULL});
 		else if (str[*i] == '+')
 		{
-			node = (b_tree){.type = ADD, .l = NULL, .r = NULL};
-			pop_tree(tree, node);
+			pop_tree(&tree, (b_tree){.type = ADD, .l = NULL, .r = NULL});
 		}
 		else if (str[*i] == '*')
-		{
-			node = (b_tree){.type = MULT, .l = NULL, .r = NULL};
-			push_tree(tree, node);
-		}
+			push_tree(&tree, (b_tree){.type = MULT, .l = NULL, .r = NULL});
 		else if (str[*i] == ')')
-			return;
-		if (str[*i])
-			(*i)++;
+		{
+			return tree;
+		}
+		(*i)++;
 	}
+	return NULL;
 }

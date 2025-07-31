@@ -27,28 +27,28 @@ void parse_input(b_tree **tree, char *parse_str)
 	{
 		if (isdigit(parse_str[i]))
 		{
-			node = (b_tree){.type = VAL, .val = parse_str[i] - 48, .l = NULL,
-				.r = NULL};
-			push_tree(tree, node);
+			push_tree(tree, (b_tree){.type = VAL, .val = parse_str[i] - 48, .l = NULL,
+				.r = NULL});
+			i++;
 		}
 		else if (parse_str[i] == '+' && parse_str[i + 1])
 		{
-			node = (b_tree){.type = ADD, .l = NULL, .r = NULL};
-			pop_tree(tree, node);
+			pop_tree(tree, (b_tree){.type = ADD, .l = NULL, .r = NULL});
+			i++;
 		}
 		else if (parse_str[i] == '*' && parse_str[i + 1])
 		{
-			node = (b_tree){.type = MULT, .l = NULL, .r = NULL};
-			push_tree(tree, node);
+			push_tree(tree, (b_tree){.type = MULT, .l = NULL, .r = NULL});
+			i++;
 		}
 		else if (parse_str[i] == '(')
 		{
-			node = (b_tree){.type = VAL, .val = parse_bracket(parse_str, &i), .l = NULL,
-				.r = NULL};
-			push_tree(tree, node);
-		}
-		if (parse_str[i])
+			int res = traverse_tree(parse_bracket(parse_str, &i, (b_tree *){NULL}));
+			printf("res %d\n", res);
+			push_tree(tree, (b_tree){.type = VAL, .val = res, .l = NULL,
+				.r = NULL});
 			i++;
+		}
 	}
 }
 
