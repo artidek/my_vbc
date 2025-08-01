@@ -43,11 +43,10 @@ void parse_input(b_tree **tree, char *parse_str)
 		}
 		else if (parse_str[i] == '(')
 		{
-			int res = traverse_tree(parse_bracket(parse_str, &i, (b_tree *){NULL}));
-			printf("res %d\n", res);
-			push_tree(tree, (b_tree){.type = VAL, .val = res, .l = NULL,
-				.r = NULL});
-			i++;
+			b_tree *temp = parse_bracket(parse_str, &i, (b_tree *){NULL}, 0);
+			int res = traverse_tree(temp);
+			free_tree(temp);
+			push_tree(tree, (b_tree){.type = VAL,.val = res, .l = NULL, .r = NULL});
 		}
 	}
 }
@@ -59,6 +58,8 @@ int	main(int argc, char **argv)
 	if (argc < 2)
 		return (1);
 	tree = NULL;
+	if (error_check(argv[1]))
+		return 1;
 	parse_input(&tree, argv[1]);
 	printf("result: %d\n", traverse_tree(tree));
 	free_tree(tree);
