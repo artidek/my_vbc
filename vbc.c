@@ -22,7 +22,7 @@ int	traverse_tree(b_tree *tree)
 void parse_input(b_tree **tree, char *parse_str)
 {
 	int		i = 0;
-	b_tree	node;
+
 	while (parse_str[i])
 	{
 		if (isdigit(parse_str[i]))

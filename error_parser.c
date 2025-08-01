@@ -17,7 +17,7 @@ static int invalid_input(char *str, int i, char symb)
 		return (0);
 	if (symb == '(' && isdigit(str[i + 1]))
 		return (invalid_input(str, i + 1, str[i + 1]));
-	if (isdigit(symb) && (str[i + 1] == '+' || str[i + 1] == '*' || str[i + 1] == ')'))
+	if (isdigit(symb) && (str[i + 1] == '+' || str[i + 1] == '*' || str[i + 1] == ')' || !str[i+1]))
 		return (invalid_input(str, i + 1, str[i + 1]));
 	if ((symb == '+' || symb == '*') && i > 0 && str[i + 1])
 	{
