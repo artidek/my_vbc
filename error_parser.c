@@ -11,28 +11,35 @@ static int invalid_token(char *str, int i, int count)
 	return (invalid_token(str, i+=1, count));
 }
 
-static int invalid_input(char *str, int i, char symb)
+int invalid_input(char *str, int i)
 {
 	if (!str[i])
-		return (0);
-	if (symb == '(' && isdigit(str[i + 1]))
-		return (invalid_input(str, i + 1, str[i + 1]));
-	if (isdigit(symb) && (str[i + 1] == '+' || str[i + 1] == '*' || str[i + 1] == ')' || !str[i+1]))
-		return (invalid_input(str, i + 1, str[i + 1]));
-	if ((symb == '+' || symb == '*') && i > 0 && str[i + 1])
+		return 0;
+	if ((!isdigit(str[i]) && str[i] != ')') && !str[i + 1])
 	{
-		if (isdigit(str[i + 1]) && isdigit(str[i - 1]))
-			return (invalid_input(str, i + 1, str[i + 1]));
-		if (str[i + 1] == '(' && isdigit(str[i - 1]))
-			return (invalid_input(str, i + 1, str[i + 1]));
-		if (isdigit(str[i + 1]) && str[i - 1] == ')')
-			return (invalid_input(str, i + 1, str[i + 1]));
-		if (str[i + 1] == '(' && str[i - 1] == ')')
-			return (invalid_input(str, i + 1, str[i + 1]));
+		printf("invalid end of input\n");
+		return 1;
 	}
-	if ((symb == ')' && (str[i + 1] == '+' || str[i + 1] == '*')) || (!str[i + 1] && symb == ')'))
-		return (invalid_input(str, i + 1, str[i + 1]));
-	return (1);
+	if(isdigit(str[i]))
+	{
+		if (!str[i + 1])
+			return (invalid_input(str, i + 1));
+		if (str[i + 1] && (str[i + 1] == '+' || str[i + 1] == '*'))
+			return (invalid_input(str, i + 1));
+		if (str[i + 1] && str[i + 1] == ')')
+			return (invalid_input(str, i + 1));
+	}
+	if (str[i] == '+' || str[i] == '*')
+	{
+		if (str[i + 1] && str[i + 1] == '(')
+			return (invalid_input(str, i + 1));
+		if (str[i + 1] && isdigit(str[i + 1]))
+			return (invalid_input(str, i + 1));
+	}
+	if (str[i] == '(' || str[i] == ')')
+		return (invalid_input(str, i + 1));
+	printf("invalide token '%c'\n", str[i + 1]);
+	return 1;
 }
 
 int error_check(char *str)
@@ -47,9 +54,8 @@ int error_check(char *str)
 		printf("invalid token )\n");
 		return (1);
 	}
-	if (invalid_input(str, 0, str[0]))
+	if (invalid_input(str, 0))
 	{
-		printf("invalid end of input\n");
 		return (1);
 	}
 	return (0);

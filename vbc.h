@@ -6,7 +6,7 @@
 /*   By: aobshatk <aobshatk@42warsaw.pl>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 13:22:25 by aobshatk          #+#    #+#             */
-/*   Updated: 2025/08/01 12:23:41 by aobshatk         ###   ########.fr       */
+/*   Updated: 2025/08/05 21:55:22 by aobshatk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void parse_input(b_tree **tree, char *parse_str);
 void free_tree(b_tree *tree);
 int	add_leaf(b_tree *branch, b_tree leaf);
 int	traverse_tree(b_tree *tree);
-b_tree	*parse_bracket(char *str, int *i, b_tree *tree, int count);
+int parse_bracket(char *str, int *i, b_tree *tree, int count);
 b_tree	*new_node(b_tree node);
 int error_check(char *str);
 
