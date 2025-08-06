@@ -29,21 +29,22 @@ void parse_input(b_tree **tree, char *parse_str)
 		{
 			push_tree(tree, (b_tree){.type = VAL, .val = parse_str[i] - 48, .l = NULL,
 				.r = NULL});
+			i++;
 		}
 		else if (parse_str[i] == '+')
 		{
 			pop_tree(tree, (b_tree){.type = ADD, .l = NULL, .r = NULL});
+			i++;
 		}
 		else if (parse_str[i] == '*')
 		{
 			push_tree(tree, (b_tree){.type = MULT, .l = NULL, .r = NULL});
+			i++;
 		}
 		else if (parse_str[i] == '(')
 		{
-			int res = parse_bracket(parse_str, &i, (b_tree *){NULL}, 0);
-			push_tree(tree, (b_tree){.type = VAL,.val = res, .l = NULL, .r = NULL});
+			push_tree(tree, (b_tree){.type = VAL,.val = parse_bracket(parse_str, &i, NULL, 0), .l = NULL, .r = NULL});
 		}
-		i++;
 	}
 }
 
